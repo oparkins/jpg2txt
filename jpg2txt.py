@@ -131,8 +131,8 @@ def Convert(config):
                 for color in colorDescriptions["color"]:
                     pixel = img.getpixel((x, y))
                     if color == rgb2hex(pixel[0], pixel[1], pixel[2]):
-                        x_meter = (x - int(config["origin-x"])) * x_scale
-                        y_meter = (y - int(config["origin-y"])) * y_scale
+                        x_meter = int((x - int(config["origin-x"])) * x_scale)
+                        y_meter = int((y - int(config["origin-y"])) * y_scale)
                         results.append((x_meter, y_meter, colorDescriptions['id']))
     return results
 

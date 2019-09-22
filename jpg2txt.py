@@ -142,7 +142,7 @@ def main(args):
     """ Main entry point of the app """
     with open(args.config, "r") as f:
         config = json.load(f)
-    output = os.path.splitext(args.config)[0]
+    output = os.path.splitext(os.path.basename(config["file"]))[0]
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
         csvWriter.writerow(["x (meters)", "y (meters)", "id"])

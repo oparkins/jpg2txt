@@ -128,35 +128,19 @@ def RemoveBlack(img):
                 if currentPixel != (0,0,0):
                     continue
                 # if top is a legit color, use that
-                if y - 1 > 0 and img.getpixel((x, y - 1)) != (255, 255, 255) and img.getpixel((x, y - 1)) != (0, 0, 0):
+                if y - 1 > 0 and img.getpixel((x, y - 1)) != (0, 0, 0):
                     img.putpixel((x,y), img.getpixel((x, y - 1)))
                     completed = False 
                     continue
-
-                # if bottom is a legit color, use that
-                if y + 1 < img.height and img.getpixel((x, y + 1)) != (255, 255, 255) and img.getpixel((x, y + 1)) != (0, 0, 0):
-                    img.putpixel((x,y), img.getpixel((x, y + 1)))
-                    completed = False 
-                    continue
-
-                # if left is a legit color, use that
-                if x - 1 > 0 and img.getpixel((x - 1, y)) != (255, 255, 255) and img.getpixel((x - 1, y)) != (0, 0, 0):
-                    img.putpixel((x,y), img.getpixel((x - 1, y)))
-                    completed = False 
-                    continue
-
-                # if right is a legit color, use that
-                if x + 1 > 0 and img.getpixel((x + 1, y)) != (255, 255, 255) and img.getpixel((x + 1, y)) != (0, 0, 0):
-                    img.putpixel((x,y), img.getpixel((x + 1, y)))
-                    completed = False 
-                    continue
         passNumber = passNumber + 1
-    img.show()
+
 def Convert(config):
     """ Converts the image to the stratigraphy descriptions """
     img = Image.open(config["file"])
     ApplyBoundaries(config, img)
     RemoveBlack(img)
+    if config["displayImage"]:
+        img.show()
     results = []
     x_scale = int(config["scale-x"]) / (int(config["ref-x"]) - int(config["origin-x"]))
     y_scale = int(config["scale-y"]) / (int(config["ref-y"]) - int(config["origin-y"]))
@@ -182,6 +166,7 @@ def main(args):
     with open(args.config, "r") as f:
         config = json.load(f)
     output = os.path.splitext(os.path.basename(config["file"]))[0]
+    config["displayImage"] = args.display
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
         csvWriter.writerow(["x (meters)", "y (meters)", "id"])
@@ -194,4 +179,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert images stratigraphy descriptions")
     parser.add_argument("-f", dest="config", help="A configuration file to read")
     parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui (not implemented)")
+    parser.add_argument("-s", dest="display", action='store_true', help="Show the image after boundaries and black line removal")
     main(parser.parse_args())

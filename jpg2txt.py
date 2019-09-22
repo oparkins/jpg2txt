@@ -114,10 +114,49 @@ def ApplyBoundaries(config, img):
     ApplyBoundaries_Right(config, img)
     ApplyBoundaries_Bottom(config, img)
 
+def RemoveBlack(img):
+    """ Will convert all black lines to the colors around them. May take multiple passes """
+    completed = False 
+    passNumber = 1
+    while completed == False:
+        completed = True
+        print("Removing black lines - Pass " + str(passNumber))
+        for x in progressbar.progressbar(range(0, img.width)):
+            for y in range(0, img.height):
+                # Skip the pixel if the color is black. If not, skip
+                currentPixel = img.getpixel((x, y)) 
+                if currentPixel != (0,0,0):
+                    continue
+                # if top is a legit color, use that
+                if y - 1 > 0 and img.getpixel((x, y - 1)) != (255, 255, 255) and img.getpixel((x, y - 1)) != (0, 0, 0):
+                    img.putpixel((x,y), img.getpixel((x, y - 1)))
+                    completed = False 
+                    continue
+
+                # if bottom is a legit color, use that
+                if y + 1 < img.height and img.getpixel((x, y + 1)) != (255, 255, 255) and img.getpixel((x, y + 1)) != (0, 0, 0):
+                    img.putpixel((x,y), img.getpixel((x, y + 1)))
+                    completed = False 
+                    continue
+
+                # if left is a legit color, use that
+                if x - 1 > 0 and img.getpixel((x - 1, y)) != (255, 255, 255) and img.getpixel((x - 1, y)) != (0, 0, 0):
+                    img.putpixel((x,y), img.getpixel((x - 1, y)))
+                    completed = False 
+                    continue
+
+                # if right is a legit color, use that
+                if x + 1 > 0 and img.getpixel((x + 1, y)) != (255, 255, 255) and img.getpixel((x + 1, y)) != (0, 0, 0):
+                    img.putpixel((x,y), img.getpixel((x + 1, y)))
+                    completed = False 
+                    continue
+        passNumber = passNumber + 1
+    img.show()
 def Convert(config):
     """ Converts the image to the stratigraphy descriptions """
     img = Image.open(config["file"])
     ApplyBoundaries(config, img)
+    RemoveBlack(img)
     results = []
     x_scale = int(config["scale-x"]) / (int(config["ref-x"]) - int(config["origin-x"]))
     y_scale = int(config["scale-y"]) / (int(config["ref-y"]) - int(config["origin-y"]))

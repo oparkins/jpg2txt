@@ -9,6 +9,7 @@ from PIL import Image
 import json
 import progressbar
 import csv
+import os
 
 __author__ = "Owen Parkins"
 __version__ = "0.1.0"
@@ -141,7 +142,8 @@ def main(args):
     """ Main entry point of the app """
     with open(args.config, "r") as f:
         config = json.load(f)
-    with open("output.csv", "w") as f:
+    output = os.path.splitext(args.config)[0]
+    with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
         csvWriter.writerow(["x (meters)", "y (meters)", "id"])
         for row in Convert(config):
@@ -152,5 +154,5 @@ if __name__ == "__main__":
     """ This is executed when run from the command line """
     parser = argparse.ArgumentParser(description="Convert images stratigraphy descriptions")
     parser.add_argument("-f", dest="config", help="A configuration file to read")
-    parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui")
+    parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui (not implemented)")
     main(parser.parse_args())

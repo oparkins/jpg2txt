@@ -186,7 +186,7 @@ def main(args):
     config["ignoreColumns"] = args.ignoreColumns
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
-        csvWriter.writerow(["x (meters)", "y (meters)", "id"])
+        csvWriter.writerow(["x", "y", "id"])
         for row in Convert(config):
             csvWriter.writerow(list(row))
 
@@ -199,5 +199,6 @@ if __name__ == "__main__":
     parser.add_argument("-r", dest="rows", help="Amount of rows to output", default=-1, type=int)
     parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui (not implemented)")
     parser.add_argument("-s", dest="display", action='store_true', help="Show the image after boundaries and black line removal")
+    parser.add_argument("-ic", dest="ignoreColumns", type=int, default=0, help="Ignore columns on the right side (useful for removing stepping)")
     parser.add_argument("-ic", dest="ignoreColumns", type=int, default=0, help="Ignore columns on the right side (useful for removing stepping)")
     main(parser.parse_args())

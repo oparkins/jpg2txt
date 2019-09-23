@@ -144,9 +144,23 @@ def Convert(config):
     results = []
     x_scale = int(config["scale-x"]) / (int(config["ref-x"]) - int(config["origin-x"]))
     y_scale = int(config["scale-y"]) / (int(config["ref-y"]) - int(config["origin-y"]))
+
+    # Calculate x skip
+    if config["columnCount"] == -1:
+        x_increment = 1
+        config["columnCount"] = img.width
+    else:
+        x_increment = int(img.width/config["columnCount"])
+    
+    # Calculate y skip
+    if config["rowCount"] == -1:
+        y_increment = 1
+        config["rowCount"] = img.height
+    else:
+        y_increment = int(img.height/config["rowCount"])
     print("Rows processed:")
-    for x in progressbar.progressbar(range(0, img.width)):
-        for y in range(0, img.height):
+    for x in progressbar.progressbar(range(0, img.width - config["ignoreColumns"] * x_increment, x_increment)):
+        for y in range(0, img.height, y_increment):
             # Skip the pixel if the color is white
             if img.getpixel((x, y)) == (255,255,255):
                 continue
@@ -167,6 +181,9 @@ def main(args):
         config = json.load(f)
     output = os.path.splitext(os.path.basename(config["file"]))[0]
     config["displayImage"] = args.display
+    config["rowCount"] = args.rows
+    config["columnCount"] = args.columns
+    config["ignoreColumns"] = args.ignoreColumns
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
         csvWriter.writerow(["x (meters)", "y (meters)", "id"])
@@ -178,6 +195,9 @@ if __name__ == "__main__":
     """ This is executed when run from the command line """
     parser = argparse.ArgumentParser(description="Convert images stratigraphy descriptions")
     parser.add_argument("-f", dest="config", help="A configuration file to read")
+    parser.add_argument("-c", dest="columns", help="Amount of columns to output", default=-1, type=int)
+    parser.add_argument("-r", dest="rows", help="Amount of rows to output", default=-1, type=int)
     parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui (not implemented)")
     parser.add_argument("-s", dest="display", action='store_true', help="Show the image after boundaries and black line removal")
+    parser.add_argument("-ic", dest="ignoreColumns", type=int, default=0, help="Ignore columns on the right side (useful for removing stepping)")
     main(parser.parse_args())

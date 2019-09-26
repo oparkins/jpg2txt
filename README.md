@@ -1,7 +1,30 @@
 # jpg2txt
 ## Converts Images of Stratigraphy to an Importable Format
 
+Takes an image and a configuration file (see below), and outputs a CSV file with the x,y, and material type of each pixel (or some dx/dy)
+
 ## How to use it
+```
+usage: jpg2txt.py [-h] [-f CONFIG] [-c COLUMNS] [-r ROWS] [-g] [-s]
+                  [-ic IGNORECOLUMNS] [-mn]
+
+Convert images stratigraphy descriptions
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -f CONFIG          A configuration file to read
+  -c COLUMNS         Amount of columns to output
+  -r ROWS            Amount of rows to output
+  -g                 Start the gui (not implemented)
+  -s                 Show the image after boundaries and black line removal
+  -ic IGNORECOLUMNS  Ignore columns on the right side (useful for removing
+                     stepping)
+  -mn                Use Mark's numbering scheme (bottom xy is origin.)
+```
+
+Instead of using the boundaries, I recommend editing the image in a photo editor (like GIMP), and then running the application without any boundaries. This is especially true if using the `-mn` flag. If using the x,y coordinates with respect to the origin, then there shouldn't be a problem to use boundaries.
+
+You can refine the grid that is outputted by using the `-c` and `-r` flags. This will limit the amount of rows and columns that are created, essentially creating some constant dx and dy during the processing.
 
 ## Example Configuration File
 An explanation of the file is below
@@ -101,15 +124,15 @@ An explanation of the file is below
 
 | attribute | description |
 |-----------|-------------|
-| file      |  The location of the file. Can be relative or absolute          | 
-| origin-x  |  The x-coordinate in pixels where the origin is                 |       
-| origin-y  |  The y-coordinate in pixels where the origin is                 |          
-| ref-x     |  The x-coordinate in pixels of the next interval on the x-axis  |    
-| ref-y     |  The y-coordinate in pixels of the next interval on the x-axis  |     
-| scale-x   |  The scale on the x-axis. In the example above, it is in meters |      
-| scale-y   |  The scale on the y-axis. In the example above, it is in meters |        
-| colors    |  Describes the different colors and how to categorize them      |    
-| boundaries|  Describes the boundaries where the script will ignore          | 
+| file      |  The location of the file. Should be absolute                                                   | 
+| origin-x  |  The x-coordinate in pixels where the origin is. Not needed if -mn is specified                 |       
+| origin-y  |  The y-coordinate in pixels where the origin is.  Not needed if -mn is specified                |          
+| ref-x     |  The x-coordinate in pixels of the next interval on the x-axis. Not needed if -mn is specified  |    
+| ref-y     |  The y-coordinate in pixels of the next interval on the x-axis. Not needed if -mn is specified  |     
+| scale-x   |  The scale on the x-axis. In the example above, it is in meters. Not needed if -mn is specified |      
+| scale-y   |  The scale on the y-axis. In the example above, it is in meters. Not needed if -mn is specified |        
+| colors    |  Describes the different colors and how to categorize them                                      |    
+| boundaries|  Describes the boundaries where the script will ignore                                          | 
 
 ### ref-x and ref-y Description
 

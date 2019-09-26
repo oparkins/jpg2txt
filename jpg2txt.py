@@ -9,6 +9,7 @@ from PIL import Image
 import json
 import progressbar
 import csv
+import math
 import os
 
 __author__ = "Owen Parkins"
@@ -148,29 +149,35 @@ def Convert(config):
     # Calculate x skip
     if config["columnCount"] == -1:
         x_increment = 1
-        config["columnCount"] = img.width
     else:
-        x_increment = int(img.width/config["columnCount"])
+        x_increment = int(math.ceil(img.width/config["columnCount"]))
     
     # Calculate y skip
     if config["rowCount"] == -1:
         y_increment = 1
-        config["rowCount"] = img.height
     else:
-        y_increment = int(img.height/config["rowCount"])
+        y_increment = int(math.ceil(img.height/config["rowCount"]))
     print("Rows processed:")
+    x_count = 0
     for x in progressbar.progressbar(range(0, img.width - config["ignoreColumns"] * x_increment, x_increment)):
-        for y in range(0, img.height, y_increment):
+        y_count = -1
+        for y in range(img.height - 1, -1, -1 * y_increment):
             # Skip the pixel if the color is white
+            y_count = y_count + 1
             if img.getpixel((x, y)) == (255,255,255):
                 continue
             for colorDescriptions in config["colors"]:
                 for color in colorDescriptions["color"]:
                     pixel = img.getpixel((x, y))
                     if color == rgb2hex(pixel[0], pixel[1], pixel[2]):
-                        x_meter = int((x - int(config["origin-x"])) * x_scale)
-                        y_meter = int((y - int(config["origin-y"])) * y_scale)
+                        if config["marksNumbering"]:
+                            x_meter = x_count
+                            y_meter = y_count
+                        else:
+                            x_meter = int((x - int(config["origin-x"])) * x_scale)
+                            y_meter = int((y - int(config["origin-y"])) * y_scale)
                         results.append((x_meter, y_meter, colorDescriptions['id']))
+        x_count = x_count + 1
     return results
 
 
@@ -184,6 +191,7 @@ def main(args):
     config["rowCount"] = args.rows
     config["columnCount"] = args.columns
     config["ignoreColumns"] = args.ignoreColumns
+    config["marksNumbering"] = args.marksNumbering
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
         csvWriter.writerow(["x", "y", "id"])
@@ -200,5 +208,5 @@ if __name__ == "__main__":
     parser.add_argument("-g", dest="gui", action='store_true', help="Start the gui (not implemented)")
     parser.add_argument("-s", dest="display", action='store_true', help="Show the image after boundaries and black line removal")
     parser.add_argument("-ic", dest="ignoreColumns", type=int, default=0, help="Ignore columns on the right side (useful for removing stepping)")
-    parser.add_argument("-ic", dest="ignoreColumns", type=int, default=0, help="Ignore columns on the right side (useful for removing stepping)")
+    parser.add_argument("-mn", dest="marksNumbering", action='store_true', help="Use Mark's numbering scheme (bottom xy is origin)")
     main(parser.parse_args())

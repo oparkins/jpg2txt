@@ -3,6 +3,14 @@
 
 Takes an image and a configuration file (see below), and outputs a CSV file with the x,y, and material type of each pixel (or some dx/dy)
 
+## Installation
+This program uses python3 to run. It has not been tested on python2.
+
+To install required libraries, use pip:
+```
+pip3 install -r requirements.txt
+```
+
 ## How to use it
 ```
 usage: jpg2txt.py [-h] [-f CONFIG] [-c COLUMNS] [-r ROWS] [-g] [-s]

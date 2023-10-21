@@ -1,0 +1,53 @@
+{
+    "file":
+"/home/dcohen/projects/fres/newjersey/mesh/jpg2txt/Lofi_Sugarman_jun9_2023/Lofi_Sugarman_jun9_2023_No_Axis_cropped_colored.jpg",
+    "origin-x": -3961,
+    "origin-y": 761,
+    "ref-x": 1,
+    "ref-y": 1,
+    "scale-x": 210000,
+    "scale-y": 910,
+    "add-x": -270000,
+    "add-y": -870,
+    "colors" : [
+        {
+            "name": "Confining Units (blue)",
+            "id": 1,
+            "color": [
+                "#0000fe",
+                "#7676d9",
+                "#1d1cfe"
+            ]
+        },
+        {
+            "name": "Intermediate K Aquifer (green)",
+            "id": 2,
+            "color": [
+                "#00e300"
+            ]
+        },
+        {
+            "name": "High K Aquifer (yellow)",
+            "id": 3,
+            "color": [
+                "#ffff00",
+                "#fefe00",
+                "#f7f707",
+                "#f4f40a",
+                "#c7c88c",
+                "#bdbd8f",
+                "#fefd0d"
+            ]
+        }
+    ],
+    "boundaries": {
+        "left": [
+        ],
+        "right" : [
+        ],
+        "top": [
+        ],
+        "bottom" : [
+        ]
+    } 
+}

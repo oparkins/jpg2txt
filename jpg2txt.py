@@ -194,7 +194,7 @@ def main(args):
     config["columnCount"] = args.columns
     config["ignoreColumns"] = args.ignoreColumns
     config["marksNumbering"] = args.marksNumbering
-    with open(output + ".csv", "w") as f:
+    with open(output + ".dat", "w") as f:
         csvWriter = csv.writer(f)
         #csvWriter.writerow(["x", "y", "id"])
         for row in Convert(config):

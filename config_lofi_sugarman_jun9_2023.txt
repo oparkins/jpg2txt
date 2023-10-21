@@ -1,6 +1,6 @@
 {
     "file":
-"/home/dcohen/projects/fres/newjersey/mesh/jpg2txt/Lofi_Sugarman_jun9_2023/Lofi_Sugarman_jun9_2023_No_Axis_cropped_colored.jpg",
+"/home/dcohen/projects/fres/newjersey/mesh/1-Lofi_Sugarman_jun9_2023/Lofi_Sugarman_jun9_2023_No_Axis_cropped_colored.jpg",
     "origin-x": -3961,
     "origin-y": 761,
     "ref-x": 1,

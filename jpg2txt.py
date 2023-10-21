@@ -174,8 +174,10 @@ def Convert(config):
                             x_meter = x_count
                             y_meter = y_count
                         else:
-                            x_meter = int((x - int(config["origin-x"])) * x_scale)
-                            y_meter = int((y - int(config["origin-y"])) * y_scale)
+                            #x_meter = int((x - int(config["origin-x"])) * x_scale + config["add-x"])
+                            #y_meter = int((y - int(config["origin-y"])) * y_scale + config["add-y"])
+                            x_meter = ((x - int(config["origin-x"])) * x_scale + config["add-x"])
+                            y_meter = ((y - int(config["origin-y"])) * y_scale + config["add-y"])
                         results.append((x_meter, y_meter, colorDescriptions['id']))
         x_count = x_count + 1
     return results
@@ -194,7 +196,7 @@ def main(args):
     config["marksNumbering"] = args.marksNumbering
     with open(output + ".csv", "w") as f:
         csvWriter = csv.writer(f)
-        csvWriter.writerow(["x", "y", "id"])
+        #csvWriter.writerow(["x", "y", "id"])
         for row in Convert(config):
             csvWriter.writerow(list(row))
 
